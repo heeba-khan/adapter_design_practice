@@ -1,19 +1,17 @@
-export{}
-
-interface Car{
-    start():void;
+interface Car {
+  start(): void;
 }
 
-class GasCar{
-    engine():void{
-        console.log("Start GasCar Engine !!");
-    }
+class GasCar {
+  engine(): void {
+    console.log("Start Gas Car Engine !!");
+  }
 }
 
-class ElectricCar{
-    power():void{
-        console.log("Power On for Electric Car !!");
-    }
+class ElectricCar {
+  power(): void {
+    console.log("Power On for Electric Car !!");
+  }
 }
 
 // const gasCar=new GasCar()
@@ -24,27 +22,27 @@ class ElectricCar{
 //! Now to make it work we need to create an adapter for GasCar and ElectricCar so that it conforms to our target interface i.e Car
 
 //* Adapter for GasCar
-class GasCarAdapter implements Car{
-    private gasCar:GasCar
+class GasCarAdapter implements Car {
+  private gasCar: GasCar;
 
-    constructor(gasCar:GasCar){
-        this.gasCar=gasCar;
-    }
-    start():void{
-        this.gasCar.engine()
-    }
+  constructor(gasCar: GasCar) {
+    this.gasCar = gasCar;
+  }
+  start(): void {
+    this.gasCar.engine();
+  }
 }
 
 //* Adapter for ElectricCar
-class ElectricCarAdapter implements Car{
-    private electricCar:ElectricCar
+class ElectricCarAdapter implements Car {
+  private electricCar: ElectricCar;
 
-    constructor(electricCar:ElectricCar){
-        this.electricCar=electricCar;
-    }
-    start():void{
-        this.electricCar.power()
-    }
+  constructor(electricCar: ElectricCar) {
+    this.electricCar = electricCar;
+  }
+  start(): void {
+    this.electricCar.power();
+  }
 }
 
 // const gasCar=new GasCar();
@@ -55,36 +53,26 @@ class ElectricCarAdapter implements Car{
 // gasCarAdapter.start();
 // electricCarAdapter.start();
 
-
-
 //! Now the question is can we make a generic adapter so that we don't need to make seperate adapter for each platforms or class like in this example
 
+//* Target Interface  -->Just like the interface that we will build for our Amazon MCF
+class TargetInterface {
+  private car: Car;
 
-//* Generic Adapter
-class GenericAdapter implements Car{
-    private car:any;
-    private startMethod:string;
+  constructor(car: Car) {
+    this.car = car;
+  }
 
-    constructor(car:any,startMethod:string){
-        this.car=car
-        this.startMethod=startMethod
-    }
-
-    start():void{
-        this.car[this.startMethod]()
-    }
+  start(): void {
+    this.car.start();
+  }
 }
 
+const gasCar = new GasCarAdapter(new GasCar());
+const electricCar = new ElectricCarAdapter(new ElectricCar());
 
-const gasCar=new GasCar();
-const electricCar=new ElectricCar();
-const gasCarAdapter=new GenericAdapter(gasCar,"engine")
-gasCarAdapter.start();
+const car1 = new TargetInterface(gasCar);
+car1.start();
 
-const electricCarAdapter=new GenericAdapter(electricCar,"power")
-electricCarAdapter.start();
-
-
-
-
-
+const car2 = new TargetInterface(electricCar);
+car2.start();

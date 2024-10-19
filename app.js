@@ -39,9 +39,26 @@ var ElectricCarAdapter = /** @class */ (function () {
     };
     return ElectricCarAdapter;
 }());
-var gasCar = new GasCar();
-var electricCar = new ElectricCar();
-var gasCarAdapter = new GasCarAdapter(gasCar);
-var electricCarAdapter = new ElectricCarAdapter(electricCar);
-gasCarAdapter.start();
-electricCarAdapter.start();
+// const gasCar=new GasCar();
+// const electricCar=new ElectricCar();
+// const gasCarAdapter=new GasCarAdapter(gasCar)
+// const electricCarAdapter=new ElectricCarAdapter(electricCar)
+// gasCarAdapter.start();
+// electricCarAdapter.start();
+//! Now the question is can we make a generic adapter so that we don't need to make seperate adapter for each platforms or class like in this example
+//* Generic Adapter
+var GenericAdapter = /** @class */ (function () {
+    function GenericAdapter(car) {
+        this.car = car;
+    }
+    GenericAdapter.prototype.start = function () {
+        this.car.start();
+    };
+    return GenericAdapter;
+}());
+var gasCar = new GasCarAdapter(new GasCar());
+var electricCar = new ElectricCarAdapter(new ElectricCar());
+var car1 = new GenericAdapter(gasCar);
+car1.start();
+var car2 = new GenericAdapter(electricCar);
+car2.start();
